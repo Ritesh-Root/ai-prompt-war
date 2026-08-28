@@ -1,7 +1,7 @@
 /* ─────────────────────────────────────────────────────────
-   PromptShala — AI ki Barakhadi
+   PromptShala — AI skills for everyday work
    Frontend SPA (vanilla JS) — PayPen-style dashboard UI
-   Agentic Guru guides & adapts per learner.
+   Agentic AI Mentor guides & adapts per learner.
    ───────────────────────────────────────────────────────── */
 
 const S = {
@@ -9,7 +9,7 @@ const S = {
   learner: null,
   content: null,
   view: 'dashboard',
-  lang: localStorage.getItem('ps_lang') || 'hi',
+  lang: localStorage.getItem('ps_lang') || 'en',
   agentAdvice: null,
   guruOpen: false,
   guruHistory: [],
@@ -47,9 +47,9 @@ function renderOnboarding() {
   <main class="min-h-screen flex items-center justify-center p-4">
     <section class="card w-full max-w-2xl p-6 md:p-10 fade-in" id="onboard-card">
       <header class="text-center mb-8">
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-ink text-white flex items-center justify-center text-2xl font-display mb-4">अ</div>
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-ink text-white flex items-center justify-center mb-4"><i class="fas fa-terminal text-xl"></i></div>
         <h1 class="font-display text-3xl md:text-4xl font-extrabold">PromptShala</h1>
-        <p class="text-inksoft mt-1 font-semibold">${T('AI ki Barakhadi — जैसे बच्चा अक्षर सीखता है, वैसे आप AI सीखेंगे','AI ki Barakhadi — learn AI the way a child learns the alphabet')}</p>
+        <p class="text-inksoft mt-1 font-semibold">${T('रोज़मर्रा के काम के लिए AI कौशल — कदम-दर-कदम, आपकी रफ़्तार पर','Practical AI skills for your everyday work — step by step, at your pace')}</p>
       </header>
 
       <div class="mb-6">
@@ -78,14 +78,14 @@ function renderOnboarding() {
       <div class="mb-8">
         <p class="font-extrabold mb-2"><i class="fas fa-robot mr-2"></i>${T('AI कितना जानते हैं?','How much AI do you know?')}</p>
         <div class="flex flex-wrap gap-2" id="ob-fam">
-          <button class="chip sel" data-f="new">${T('बिल्कुल नया 🌱','Totally new 🌱')}</button>
-          <button class="chip" data-f="some">${T('थोड़ा सुना है 🙂','Heard a bit 🙂')}</button>
-          <button class="chip" data-f="used">${T('इस्तेमाल किया है 💪','Have used it 💪')}</button>
+          <button class="chip sel" data-f="new">${T('अभी शुरू कर रहा हूँ','Just getting started')}</button>
+          <button class="chip" data-f="some">${T('थोड़ी जानकारी है','Know the basics')}</button>
+          <button class="chip" data-f="used">${T('इस्तेमाल कर चुका हूँ','Have used AI tools')}</button>
         </div>
       </div>
 
-      <button id="ob-go" class="btn-ink w-full py-4 text-lg"><i class="fas fa-rocket mr-2"></i>${T('पाठशाला शुरू करें','Start my Paathshala')}</button>
-      <p class="text-center text-xs text-inksoft mt-3">${T('आपका निजी AI गुरु आपके हिसाब से सिखाएगा','Your personal AI Guru will adapt to you')}</p>
+      <button id="ob-go" class="btn-ink w-full py-4 text-lg"><i class="fas fa-arrow-right mr-2"></i>${T('सीखना शुरू करें','Start learning')}</button>
+      <p class="text-center text-xs text-inksoft mt-3">${T('आपका निजी AI मेंटर आपकी रफ़्तार और पेशे के हिसाब से सिखाएगा','Your personal AI Mentor adapts to your pace and profession')}</p>
     </section>
   </main>`;
 
@@ -112,20 +112,20 @@ function renderShell() {
   <div class="min-h-screen flex">
     <aside class="sidebar w-64 bg-white border-r border-line flex flex-col shrink-0" id="sidebar">
       <div class="px-5 py-5 border-b border-line flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-ink text-white flex items-center justify-center font-display font-extrabold">अ</div>
+        <div class="w-9 h-9 rounded-xl bg-ink text-white flex items-center justify-center"><i class="fas fa-terminal text-sm"></i></div>
         <div><p class="font-display font-extrabold leading-tight">PromptShala</p>
-        <p class="text-[11px] text-inksoft font-bold">AI ki Barakhadi</p></div>
+        <p class="text-[11px] text-inksoft font-bold">${T('AI कौशल','AI skills')}</p></div>
       </div>
       <nav class="flex-1 px-3 py-4 space-y-1" id="nav" aria-label="Main">
         <p class="text-[11px] uppercase tracking-wider text-inksoft/70 font-extrabold px-3 mb-2">${T('मुख्य मेनू','Main Menu')}</p>
         ${navItem('dashboard','fa-table-columns',T('डैशबोर्ड','Dashboard'))}
-        ${navItem('lessons','fa-book-open',T('पाठशाला','Lessons'))}
-        ${navItem('playground','fa-wand-magic-sparkles',T('AI मैदान','Playground'))}
-        ${navItem('report','fa-chart-simple',T('रिपोर्ट कार्ड','Report Card'))}
+        ${navItem('lessons','fa-book-open',T('पाठ','Lessons'))}
+        ${navItem('playground','fa-flask',T('प्लेग्राउंड','Playground'))}
+        ${navItem('report','fa-chart-simple',T('प्रगति','Progress'))}
         ${navItem('certificate','fa-award',T('प्रमाणपत्र','Certificate'))}
       </nav>
       <footer class="px-5 py-4 border-t border-line text-[11px] text-inksoft font-bold">
-        <p><i class="fas fa-heart text-saffron mr-1"></i>${T('हर भारतीय के लिए AI','AI for every Indian')}</p>
+        <p>${T('हर भारतीय के लिए AI','AI for every Indian')}</p>
       </footer>
     </aside>
 
@@ -146,10 +146,10 @@ function renderShell() {
     </div>
   </div>
 
-  <button id="guru-fab" class="guru-fab btn-ink w-14 h-14 rounded-full text-xl" title="AI Guru" aria-label="AI Guru">
-    <i class="fas fa-hat-wizard"></i>
+  <button id="guru-fab" class="guru-fab btn-ink w-14 h-14 rounded-full text-xl" title="AI Mentor" aria-label="AI Mentor">
+    <i class="fas fa-user-tie"></i>
   </button>
-  <section id="guru-panel" class="guru-panel card hidden flex-col overflow-hidden" aria-label="AI Guru chat"></section>`;
+  <section id="guru-panel" class="guru-panel card hidden flex-col overflow-hidden" aria-label="AI Mentor chat"></section>`;
 
   $('nav').onclick = (e) => { const b = e.target.closest('[data-v]'); if (b) { go(b.dataset.v); if (window.innerWidth < 900) toggleSidebar(false); } };
   $('burger') && ($('burger').onclick = () => toggleSidebar());

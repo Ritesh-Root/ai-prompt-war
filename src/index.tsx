@@ -78,7 +78,7 @@ DECISION RULES:
 - If learner is struggling (wrong quizzes, low grades), pick an easier/earlier remaining lesson and lower the challenge; give extra encouragement.
 - If learner is fast & confident, you may skip ahead one lesson or add a stretch challenge.
 - If all lessons done, action = "certificate".
-- "message" = 2-3 short sentences: greet by name, mention ONE specific thing you noticed from their activity, then tell them what to do next and why. Use learner's language.
+- "message" = 2-3 short sentences: greet by name, mention ONE specific thing you noticed from their activity, then tell them what to do next and why. Use learner's language. Respectful and professional; no emojis.
 - "tip" = one practical prompting micro-tip tied to their profession.
 
 Respond with ONLY this JSON:
@@ -108,8 +108,8 @@ Respond with ONLY this JSON:
       action: remaining.length ? 'lesson' : 'certificate',
       lessonId: remaining[0]?.id || null,
       message: learner.lang === 'hi'
-        ? `${learner.name} जी, चलिए अगला कदम बढ़ाते हैं! 🚀`
-        : `${learner.name}, let's take the next step! 🚀`,
+        ? `${learner.name} जी, चलिए अगला कदम बढ़ाते हैं।`
+        : `${learner.name}, let's take the next step.`,
       tip: '', challenge: '', fallback: true
     })
   }
@@ -186,7 +186,8 @@ app.post('/api/playground/run', async (c) => {
 - Answer the user's prompt genuinely and helpfully.
 - Keep it SHORT (under 140 words) and phone-friendly.
 - Match the language of the user's prompt (Hindi → Hindi, English → simple English). Default: ${lang === 'hi' ? 'Hindi' : 'English'}.
-- Simple words only; this may be the user's very first AI conversation — make it feel magical and successful.`
+- Clear, plain words; this may be the user's very first AI conversation — make it genuinely useful and confidence-building. Treat them as a capable adult.
+- Do NOT use emojis.`
   const msgs: any[] = [{ role: 'system', content: sys }]
   if (Array.isArray(history)) for (const h of history.slice(-6)) msgs.push(h)
   msgs.push({ role: 'user', content: String(prompt).slice(0, 2000) })

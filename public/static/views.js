@@ -14,18 +14,18 @@ function renderDashboard() {
 
   <section class="card bg-ink text-white p-6 md:p-8 mb-6 relative overflow-hidden" id="guru-banner" style="background:#23252F">
     <div class="relative z-10 max-w-xl">
-      <p class="text-xs font-extrabold uppercase tracking-wider text-white/60 mb-1"><i class="fas fa-hat-wizard mr-1"></i>${T('आपके AI गुरु का संदेश','Message from your AI Guru')}</p>
+      <p class="text-xs font-extrabold uppercase tracking-wider text-white/60 mb-1"><i class="fas fa-user-tie mr-1"></i>${T('आपके AI मेंटर का संदेश','Message from your AI Mentor')}</p>
       <div id="guru-msg" class="font-display text-lg md:text-xl font-bold leading-snug">
         ${adv ? esc(adv.message) : `<span class="typing"><span></span><span></span><span></span></span>`}
       </div>
       ${adv && adv.tip ? `<p class="mt-3 text-sm text-white/80 bg-white/10 rounded-lg px-3 py-2 inline-block"><i class="fas fa-lightbulb text-saffron mr-1"></i>${esc(adv.tip)}</p>` : ''}
       <div class="mt-4">
         <button id="guru-next-btn" class="bg-white text-ink font-extrabold rounded-lg px-5 py-2.5 hover:bg-gray-100 transition">
-          ${adv && adv.action === 'certificate' ? T('प्रमाणपत्र लें 🎓','Get certificate 🎓') : T('अगला कदम शुरू करें','Start next step')} <i class="fas fa-arrow-right ml-1"></i>
+          ${adv && adv.action === 'certificate' ? T('प्रमाणपत्र लें','Get certificate') : T('अगला कदम शुरू करें','Start next step')} <i class="fas fa-arrow-right ml-1"></i>
         </button>
       </div>
     </div>
-    <i class="fas fa-hat-wizard absolute -right-4 -bottom-6 text-[9rem] text-white/5"></i>
+    <i class="fas fa-user-tie absolute -right-4 -bottom-6 text-[9rem] text-white/5"></i>
   </section>
 
   <div class="grid md:grid-cols-3 gap-4 mb-6">
@@ -36,7 +36,7 @@ function renderDashboard() {
 
   <div class="grid md:grid-cols-2 gap-4">
     <section class="card p-6">
-      <h2 class="font-extrabold mb-4"><i class="fas fa-map mr-2"></i>${T('आपकी बारहखड़ी यात्रा','Your Barakhadi journey')}</h2>
+      <h2 class="font-extrabold mb-4"><i class="fas fa-map mr-2"></i>${T('आपकी सीखने की यात्रा','Your learning path')}</h2>
       <div class="mb-3 h-2.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full transition-all" style="width:${pct}%"></div></div>
       <p class="text-sm font-bold text-inksoft mb-4">${pct}% ${T('पूरा','complete')}</p>
       <div class="space-y-2">
@@ -56,17 +56,17 @@ function renderDashboard() {
     </section>
 
     <section class="card p-6">
-      <h2 class="font-extrabold mb-4"><i class="fas fa-user-graduate mr-2"></i>${T('गुरु की नज़र में आप','How your Guru sees you')}</h2>
+      <h2 class="font-extrabold mb-4"><i class="fas fa-user-tie mr-2"></i>${T('मेंटर का आकलन','Your Mentor\'s assessment')}</h2>
       <div class="space-y-3 text-sm">
         ${meter(T('आत्मविश्वास','Confidence'), st.confidence || 0)}
         ${meter(T('प्रॉम्प्ट स्किल','Prompt skill'), st.promptSkill || 0)}
         <div class="flex items-center justify-between py-1">
           <span class="font-bold text-inksoft">${T('सीखने की रफ़्तार','Learning pace')}</span>
-          <span class="chip pointer-events-none text-xs">${({slow:T('धीरे-धीरे 🐢','Steady 🐢'),normal:T('सामान्य 🚶','Normal 🚶'),fast:T('तेज़ 🚀','Fast 🚀')})[st.pace||'normal']}</span>
+          <span class="chip pointer-events-none text-xs">${({slow:T('आराम से, मज़बूती से','Thorough'),normal:T('संतुलित','Balanced'),fast:T('तेज़','Fast')})[st.pace||'normal']}</span>
         </div>
         ${st.wins && st.wins.length ? `<p class="text-xs font-bold text-leaf bg-leaf/10 rounded-lg px-3 py-2"><i class="fas fa-thumbs-up mr-1"></i>${T('मज़बूत पक्ष','Strengths')}: ${st.wins.map(esc).join(', ')}</p>` : ''}
         ${st.struggles && st.struggles.length ? `<p class="text-xs font-bold text-saffron bg-saffron/10 rounded-lg px-3 py-2"><i class="fas fa-dumbbell mr-1"></i>${T('अभ्यास चाहिए','Needs practice')}: ${st.struggles.map(esc).join(', ')}</p>` : ''}
-        <p class="text-[11px] text-inksoft/70 font-semibold pt-1"><i class="fas fa-robot mr-1"></i>${T('यह प्रोफ़ाइल आपका AI गुरु अपने-आप बनाता और बदलता रहता है','This profile is built & updated automatically by your AI Guru')}</p>
+        <p class="text-[11px] text-inksoft/70 font-semibold pt-1"><i class="fas fa-robot mr-1"></i>${T('यह प्रोफ़ाइल आपका AI मेंटर आपकी प्रगति के आधार पर अपने-आप बनाता है','This profile is built and updated automatically by your AI Mentor as you progress')}</p>
       </div>
     </section>
   </div>`;
@@ -96,7 +96,7 @@ function renderLessons() {
   const doneSet = new Set(L.doneLessons || []);
   $('view').innerHTML = `
   <h1 class="font-display text-2xl md:text-3xl font-extrabold mb-1">${T('पाठशाला','Lessons')}</h1>
-  <p class="text-inksoft font-bold text-sm mb-6">${T('जैसे अ आ इ ई — एक-एक करके, आसानी से','Like अ आ इ ई — one by one, easily')}</p>
+  <p class="text-inksoft font-bold text-sm mb-6">${T('बुनियाद से एडवांस तक — अपनी रफ़्तार से','From foundations to advanced — at your own pace')}</p>
   <div class="space-y-6">
     ${S.content.levels.map(lv => {
       const lessons = S.content.lessons.filter(x => x.level === lv.level);
@@ -160,9 +160,9 @@ async function completeLesson(ls, stars) {
   const el = document.createElement('div');
   el.className = 'card p-5 mt-5 text-center fade-in';
   el.innerHTML = `
-    <p class="font-display text-xl font-extrabold mb-1">${'⭐'.repeat(stars)} ${T('शाबाश!','Well done!')}</p>
-    <p class="text-sm font-bold text-inksoft mb-4">${T('पाठ पूरा! गुरु जी आपकी प्रगति देख रहे हैं...','Lesson complete! Your Guru is watching your progress...')}</p>
-    <button id="next-step" class="btn-ink px-6 py-3">${T('गुरु से अगला कदम पूछें','Ask Guru for next step')} <i class="fas fa-hat-wizard ml-1"></i></button>`;
+    <p class="font-display text-xl font-extrabold mb-1">${starIcons(stars)} ${T('पाठ पूरा','Lesson complete')}</p>
+    <p class="text-sm font-bold text-inksoft mb-4">${T('आपकी प्रगति दर्ज हो गई — मेंटर अगला कदम तैयार कर रहा है','Progress recorded — your Mentor is preparing the next step')}</p>
+    <button id="next-step" class="btn-ink px-6 py-3">${T('अगला कदम देखें','See next step')} <i class="fas fa-arrow-right ml-1"></i></button>`;
   $('activity').appendChild(el);
   el.scrollIntoView({ behavior: 'smooth' });
   $('next-step').onclick = async () => {
@@ -229,10 +229,10 @@ function renderBlocks(ls) {
   const B = S.content.blocks, prof = S.learner.profession;
   const pick = (cat) => [...(B[cat][prof] || []), ...(B[cat].generic || [])];
   const groups = [
-    { key: 'role', icon: '🎭', label: T('भूमिका','Role'), items: pick('role') },
-    { key: 'task', icon: '📋', label: T('काम','Task'), items: pick('task') },
-    { key: 'detail', icon: '🔍', label: T('जानकारी','Details'), items: pick('detail') },
-    { key: 'format', icon: '📦', label: T('ढंग','Format'), items: pick('format') }
+    { key: 'role', icon: '<i class="fas fa-user-gear mr-1"></i>', label: T('भूमिका','Role'), items: pick('role') },
+    { key: 'task', icon: '<i class="fas fa-list-check mr-1"></i>', label: T('काम','Task'), items: pick('task') },
+    { key: 'detail', icon: '<i class="fas fa-magnifying-glass mr-1"></i>', label: T('संदर्भ','Context'), items: pick('detail') },
+    { key: 'format', icon: '<i class="fas fa-table-list mr-1"></i>', label: T('प्रारूप','Format'), items: pick('format') }
   ];
   const sel = {};
   $('activity').innerHTML = `
@@ -285,13 +285,13 @@ function renderBlocks(ls) {
 /* activity: free prompt with agent task + grading */
 async function renderFreePrompt(ls) {
   $('activity').innerHTML = `<div class="bg-paper border border-line rounded-xl p-4 mb-4">
-    <p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-hat-wizard mr-1"></i>${T('गुरु जी आपके लिए काम बना रहे हैं...','Guru is preparing your task...')}</p>
+    <p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-user-tie mr-1"></i>${T('मेंटर आपके लिए काम तैयार कर रहा है...','Your Mentor is preparing your task...')}</p>
     <div class="typing"><span></span><span></span><span></span></div></div>`;
   let task = { task: '', hint: '' };
   try { task = await api('post', '/api/agent/task', { learnerId: S.learnerId }); } catch {}
   $('activity').innerHTML = `
     <div class="bg-paper border border-line rounded-xl p-4 mb-4">
-      <p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-hat-wizard mr-1"></i>${T('गुरु जी का काम (आपके लिए बनाया गया)','Your Guru\'s task (made for you)')}</p>
+      <p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-user-tie mr-1"></i>${T('आपके लिए तैयार किया गया काम','A task prepared for you')}</p>
       <p class="font-bold">${esc(task.task)}</p>
       ${task.hint ? `<p class="text-sm font-bold text-saffron mt-2"><i class="fas fa-lightbulb mr-1"></i>${esc(task.hint)}</p>` : ''}
     </div>
@@ -312,7 +312,7 @@ async function renderFreePrompt(ls) {
   };
   $('grade-free').onclick = async () => {
     const p = $('free-prompt').value.trim(); if (!p) return $('free-prompt').focus();
-    $('grade-out').innerHTML = aiThinking(T('गुरु जी जाँच रहे हैं...','Guru is grading...'));
+    $('grade-out').innerHTML = aiThinking(T('मेंटर आकलन कर रहा है...','Your Mentor is reviewing...'));
     try {
       const g = await api('post', '/api/grade', { learnerId: S.learnerId, prompt: p, task: task.task });
       $('grade-out').innerHTML = gradeCard(g);
@@ -324,7 +324,7 @@ async function renderFreePrompt(ls) {
 
 /* activity: workflow (level 5) */
 async function renderWorkflow(ls) {
-  $('activity').innerHTML = `<div class="bg-paper border border-line rounded-xl p-4"><p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-hat-wizard mr-1"></i>${T('गुरु जी आपका workflow बना रहे हैं...','Guru is designing your workflow...')}</p><div class="typing"><span></span><span></span><span></span></div></div>`;
+  $('activity').innerHTML = `<div class="bg-paper border border-line rounded-xl p-4"><p class="text-xs font-extrabold uppercase text-inksoft mb-1"><i class="fas fa-user-tie mr-1"></i>${T('मेंटर आपका workflow तैयार कर रहा है...','Your Mentor is designing your workflow...')}</p><div class="typing"><span></span><span></span><span></span></div></div>`;
   let wf = { title: '', steps: [] };
   try { wf = await api('post', '/api/agent/workflow', { learnerId: S.learnerId }); } catch {}
   if (!wf.steps || !wf.steps.length) { $('activity').innerHTML = aiError(); return; }
@@ -352,7 +352,7 @@ async function renderWorkflow(ls) {
         lastReply = reply;
         $('ai-out').innerHTML = aiReplyCard(p, reply) + `
           <button id="wf-next" class="btn-ink px-6 py-3 mt-3 w-full sm:w-auto">
-            ${step < wf.steps.length - 1 ? T('अगला कदम','Next step') + ' <i class="fas fa-arrow-right ml-1"></i>' : T('Workflow पूरा! 🎉','Finish workflow! 🎉')}
+            ${step < wf.steps.length - 1 ? T('अगला कदम','Next step') + ' <i class="fas fa-arrow-right ml-1"></i>' : T('Workflow पूरा करें','Complete workflow')}
           </button>`;
         $('wf-next').onclick = () => {
           if (step < wf.steps.length - 1) { step++; draw(); }
@@ -365,6 +365,12 @@ async function renderWorkflow(ls) {
 }
 
 /* ── shared AI output widgets ─────────────────────────── */
+function starIcons(n) {
+  n = Math.max(0, Math.min(3, n || 0));
+  let out = '';
+  for (let i = 0; i < 3; i++) out += `<i class="${i < n ? 'fas' : 'far'} fa-star ${i < n ? 'text-saffron' : 'text-line'}"></i>`;
+  return `<span class="inline-flex gap-0.5 align-middle">${out}</span>`;
+}
 function aiThinking(txt) {
   return `<div class="bubble-ai p-4"><p class="text-xs font-extrabold text-inksoft mb-1"><i class="fas fa-robot mr-1"></i>AI</p><div class="typing"><span></span><span></span><span></span></div>${txt?`<p class="text-xs font-bold text-inksoft mt-1">${txt}</p>`:''}</div>`;
 }
@@ -378,7 +384,7 @@ function aiError() {
   return `<div class="bubble-ai p-4 text-sm font-bold text-red-500"><i class="fas fa-plug-circle-xmark mr-1"></i>${T('AI से जुड़ नहीं पाए — एक बार फिर कोशिश कीजिए','Could not reach AI — please try once more')}</div>`;
 }
 function gradeCard(g) {
-  const stars = '⭐'.repeat(g.stars || 1) + '☆'.repeat(3 - (g.stars || 1));
+  const stars = starIcons(g.stars || 1);
   const bar = (l,v)=>`<div class="flex items-center gap-2 text-xs font-bold"><span class="w-20 text-inksoft">${l}</span><div class="flex-1 h-1.5 bg-line rounded-full"><div class="h-full bg-ink rounded-full" style="width:${(v/5)*100}%"></div></div><span>${v}/5</span></div>`;
   return `<div class="card p-5 fade-in border-2 border-ink">
     <div class="flex items-center justify-between mb-3">
@@ -392,6 +398,6 @@ function gradeCard(g) {
     </div>
     ${g.praise?`<p class="text-sm font-bold text-leaf bg-leaf/10 rounded-lg px-3 py-2 mb-2"><i class="fas fa-heart mr-1"></i>${esc(g.praise)}</p>`:''}
     ${g.improve?`<p class="text-sm font-bold text-saffron bg-saffron/10 rounded-lg px-3 py-2 mb-2"><i class="fas fa-arrow-trend-up mr-1"></i>${esc(g.improve)}</p>`:''}
-    ${g.better?`<div class="bg-paper border border-line rounded-lg px-3 py-2"><p class="text-[11px] font-extrabold uppercase text-inksoft mb-1">${T('गुरु जी का सुधरा हुआ प्रॉम्प्ट','Guru\'s improved prompt')}</p><p class="text-sm font-bold">${esc(g.better)}</p></div>`:''}
+    ${g.better?`<div class="bg-paper border border-line rounded-lg px-3 py-2"><p class="text-[11px] font-extrabold uppercase text-inksoft mb-1">${T('मेंटर का सुझाया सुधार','A suggested refinement')}</p><p class="text-sm font-bold">${esc(g.better)}</p></div>`:''}
   </div>`;
 }

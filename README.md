@@ -1,7 +1,7 @@
-# PromptShala — AI ki Barakhadi 🇮🇳
+# PromptShala — AI skills for everyday work
 
-> **India learns AI the way it learned the alphabet.**
-> An agentic-AI-guided platform that teaches everyday Indians (shopkeepers, farmers, teachers, tailors, students, home-makers) how to use AI in their daily work — with the pedagogy of a child learning अ आ इ ई.
+> **Practical AI literacy for every working Indian.**
+> An agentic-AI-guided platform that teaches working adults (shopkeepers, farmers, teachers, tailors, students, home-makers, office professionals) how to use AI tools — ChatGPT, Gemini, Claude — effectively in their daily work. From foundations to advanced prompting, guided by a personal AI Mentor that adapts to each learner.
 
 Built for **PromptWars × AbhiyantriX 2026** (Devpost / Hack2Skill / GDG).
 
@@ -14,24 +14,25 @@ Built for **PromptWars × AbhiyantriX 2026** (Devpost / Hack2Skill / GDG).
 - **Sandbox dev**: https://3000-iy5ualdbaqz5mp0ctj5kp-a402f90a.sandbox.novita.ai
 - **Production**: (deploy pending — Cloudflare Pages)
 
-## The Barakhadi Learning Model (5 levels)
-| Level | Alphabet stage | What the learner does |
+## The Curriculum (6 levels, 19 lessons)
+| Level | Theme | What the learner does |
 |---|---|---|
-| 1 · अ (Nursery) | What is AI? | Tap-quiz concept cards, zero jargon |
-| 2 · का कि की (KG) | Baby prompts | Fill-in-the-blank → **live AI response** (the magic moment) |
-| 3 · शब्द (Class 1) | Prompt Blocks | LEGO-style visual builder: Role + Task + Details + Format |
-| 4 · वाक्य (Class 2) | Real-work prompts | **Agent-generated task** for their profession → free prompt → **AI report card** |
-| 5 · कहानी (Class 3) | AI workflows | **Agent-designed 3-step prompt chain** → AI Literacy Certificate 🎓 |
+| 1 · Foundations | What AI is, what a prompt is, capabilities & limits (hallucinations) | Concept cards + quizzes |
+| 2 · Getting Started | ChatGPT / Gemini / Claude / Copilot: accounts, free vs paid, privacy & safety | Practical tool onboarding |
+| 3 · First Prompts | Fill-in-the-blank prompts with **live AI responses**; controlling level, language, context | Guided live practice |
+| 4 · Prompt Craft | Role + Task + Context + Format via visual block builder | Structured prompt building |
+| 5 · AI at Work | Agent-generated real tasks, follow-up refinement, verification habit, reusable templates | Independent prompting + AI report cards |
+| 6 · Advanced Techniques | Few-shot prompting, step-by-step reasoning, prompt chains (3-step workflow) | Advanced practice → AI Literacy Certificate |
 
-## The Agentic Guru (what makes this agentic, not just AI-flavoured)
+## The Agentic Mentor (what makes this agentic, not just AI-flavoured)
 A genuine **observe → model → decide → act** loop:
 
 1. **OBSERVE** — every quiz answer, prompt run, grade, and chat is logged as an event in D1.
 2. **MODEL** — deterministic reducer (`updateModelFromEvent`) maintains a persistent learner model: pace (slow/normal/fast), confidence, rolling prompt-skill score, detected struggles (e.g. `missing-details`, `no-format`) and strengths.
-3. **DECIDE** — `/api/agent/next`: the Guru LLM reads the learner model + last 12 events + remaining curriculum and autonomously decides the next lesson (may slow down, re-order, or skip ahead), writing a personalized message referencing what it actually observed.
+3. **DECIDE** — `/api/agent/next`: the Mentor LLM reads the learner model + last 12 events + remaining curriculum and autonomously decides the next lesson (may slow down, re-order, or skip ahead), writing a personalized message referencing what it actually observed.
 4. **ACT** — `/api/agent/task` and `/api/agent/workflow` generate profession-specific tasks that deliberately exercise the learner's weak areas; `/api/grade` produces a report card whose tags feed back into the model, closing the loop.
 
-Everything the Guru does is visible to the learner in "How your Guru sees you" — transparency builds trust for first-time AI users.
+Everything the Mentor does is visible to the learner in "Your Mentor's assessment" — transparency builds trust for first-time AI users.
 
 ## Functional Entry Points (API)
 | Method & Path | Params | Purpose |
@@ -40,7 +41,7 @@ Everything the Guru does is visible to the learner in "How your Guru sees you" �
 | `POST /api/learner` | `{name, profession, lang, familiarity}` | Create learner (3-tap onboarding) |
 | `GET /api/learner/:id` | — | Learner + agent state + completed lessons |
 | `POST /api/learner/:id/event` | `{type, data}` | Log event; updates learner model |
-| `POST /api/agent/next` | `{learnerId}` | **Agent decision**: next best step + personal message + tip |
+| `POST /api/agent/next` | `{learnerId}` | **Agent decision: next best step + personal message + tip |
 | `POST /api/agent/task` | `{learnerId}` | **Agent-generated** profession task (Level 4) |
 | `POST /api/agent/workflow` | `{learnerId}` | **Agent-designed** 3-step prompt chain (Level 5) |
 | `POST /api/playground/run` | `{learnerId, prompt, history?}` | Run learner's prompt on live LLM |
@@ -50,8 +51,11 @@ Everything the Guru does is visible to the learner in "How your Guru sees you" �
 ## Features Completed
 - ✅ 3-tap onboarding (language → name → profession → familiarity)
 - ✅ PayPen-inspired clean dashboard (white / minimal / dark-navy, sidebar layout)
-- ✅ 5-level Barakhadi curriculum, fully bilingual (हिंदी / English, live toggle)
-- ✅ 6 profession paths with tailored examples & blocks
+- ✅ 6-level curriculum (19 lessons), English default, full Hindi available (live toggle)
+- ✅ Getting-started track for ChatGPT / Gemini / Claude (accounts, free vs paid, privacy)
+- ✅ Advanced techniques level: few-shot, step-by-step reasoning, prompt chains
+- ✅ 7 profession paths with tailored examples & blocks
+- ✅ Emoji-free, professional, respectful adult tone throughout
 - ✅ Agentic Guru: decision engine, personalized tasks, adaptive workflows, mentor chat (floating panel)
 - ✅ Live AI playground with voice input (Web Speech API, hi-IN)
 - ✅ Visual Prompt Blocks builder (Role/Task/Details/Format)
@@ -82,14 +86,14 @@ Everything the Guru does is visible to the learner in "How your Guru sees you" �
 
 ## User Guide
 1. Open the app → pick language, name, profession, AI familiarity (3 taps).
-2. Dashboard shows your **Guru's personal message** — tap "Start next step".
+2. Dashboard shows your **Mentor's personal message** — tap "Start next step".
 3. Complete lessons: tap quizzes → fill-blank live AI → prompt blocks → free prompts with report cards → final workflow.
-4. Ask the floating 🧙 **AI Guru** anything, anytime — it knows your history.
-5. Finish all 5 levels → print your **AI Literacy Certificate**.
+4. Ask the floating **AI Mentor** anything, anytime — it knows your history.
+5. Finish all 6 levels → print your **AI Literacy Certificate**.
 
 ## Deployment
 - **Platform**: Cloudflare Pages + Workers (Hono), D1 database
 - **Status**: ✅ Running in sandbox (dev) | ⏳ Production deploy pending
 - **Tech Stack**: Hono + TypeScript + Vite + TailwindCSS (CDN) + vanilla JS SPA + Cloudflare D1 + OpenAI-compatible LLM
 - **Local dev**: `npm run build && pm2 start ecosystem.config.cjs` (wrangler pages dev on :3000, `--d1 --local`)
-- **Last Updated**: 2026-08-28
+- **Last Updated**: 2026-08-28 (v2: 6 levels, English default, professional tone)

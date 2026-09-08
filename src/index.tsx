@@ -5,6 +5,7 @@ import {
   updateModelFromEvent, llm, safeJson, guruPersona, DEFAULT_MODEL
 } from './agent'
 import { LESSONS, LEVELS, PROFESSIONS, BLOCKS } from './content'
+import { TRENDS } from './trends'
 import { page } from './page'
 
 const app = new Hono<{ Bindings: Env }>()
@@ -12,7 +13,10 @@ const app = new Hono<{ Bindings: Env }>()
 app.use('/api/*', cors())
 
 // ── Static content APIs ───────────────────────────────────────
-app.get('/api/content', (c) => c.json({ lessons: LESSONS, levels: LEVELS, professions: PROFESSIONS, blocks: BLOCKS }))
+app.get('/api/content', (c) => c.json({ lessons: LESSONS, levels: LEVELS, professions: PROFESSIONS, blocks: BLOCKS, trends: TRENDS }))
+
+// ── Daily ideas & trends feed ───────────────────────────────
+app.get('/api/trends', (c) => c.json({ date: '2026-09-08', trends: TRENDS }))
 
 // ── Learner APIs ──────────────────────────────────────────────
 app.post('/api/learner', async (c) => {

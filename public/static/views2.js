@@ -48,6 +48,29 @@ function renderPlayground() {
   }
 }
 
+/* ── Daily Ideas & Trends ─────────────────────────────── */
+function renderTrends() {
+  const trends = (S.content && S.content.trends) || [];
+  $('view').innerHTML = `
+  <h1 class="font-display text-2xl md:text-3xl font-extrabold mb-1">${T('रोज़ के आइडिया और रुझान','Daily Ideas & Trends')}</h1>
+  <p class="text-inksoft font-bold text-sm mb-6">${T('आपके आस-पास क्या हो रहा है — और आज AI से क्या आज़माएँ','What is happening around you — and one thing to try with AI today')}</p>
+  <div class="space-y-4 max-w-3xl">
+    ${trends.length ? trends.map(t => `
+    <article class="card p-5 md:p-6">
+      <p class="text-[11px] font-extrabold uppercase tracking-wider text-inksoft/70 mb-1"><i class="fas fa-calendar-day mr-1"></i>${esc(t.date)} · ${esc(t.levelLink)}</p>
+      <h2 class="font-display text-lg font-extrabold leading-snug mb-2">${esc(S.lang === 'hi' ? t.title.hi : t.title.en)}</h2>
+      <p class="text-sm font-semibold mb-1"><span class="font-extrabold">${T('क्या हुआ: ','What happened: ')}</span>${esc(S.lang === 'hi' ? t.what.hi : t.what.en)}</p>
+      <p class="text-sm font-semibold mb-1"><span class="font-extrabold">${T('आपके लिए मतलब: ','Why it matters: ')}</span>${esc(S.lang === 'hi' ? t.why.hi : t.why.en)}</p>
+      <p class="text-sm font-bold text-leaf bg-leaf/10 rounded-lg px-3 py-2 my-2"><i class="fas fa-lightbulb mr-1"></i>${esc(S.lang === 'hi' ? t.idea.hi : t.idea.en)}</p>
+      <div class="bg-paper border border-line rounded-lg px-3 py-2 flex items-start gap-2">
+        <p class="text-sm font-bold flex-1">"${esc(t.prompt)}"</p>
+        <button class="btn-ghost text-xs px-3 py-1.5 shrink-0" data-copy="${esc(t.prompt)}"><i class="fas fa-copy mr-1"></i>${T('कॉपी','Copy')}</button>
+      </div>
+    </article>`).join('') : `<section class="card p-8 text-center"><p class="font-bold text-inksoft">${T('आज के आइडिया लोड हो रहे हैं...','Loading today\u2019s ideas...')}</p></section>`}
+  </div>`;
+  $('view').querySelectorAll('[data-copy]').forEach(b => { b.onclick = () => { try { navigator.clipboard.writeText(b.dataset.copy); b.innerHTML = '<i class="fas fa-check mr-1"></i>OK'; } catch {} }; });
+}
+
 /* ── Report card view ─────────────────────────────────── */
 function renderReport() {
   const st = S.learner.state || {};

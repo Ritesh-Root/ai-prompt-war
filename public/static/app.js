@@ -121,6 +121,7 @@ function renderShell() {
         ${navItem('dashboard','fa-table-columns',T('डैशबोर्ड','Dashboard'))}
         ${navItem('lessons','fa-book-open',T('पाठ','Lessons'))}
         ${navItem('playground','fa-flask',T('प्लेग्राउंड','Playground'))}
+        ${navItem('trends','fa-arrow-trend-up',T('रोज़ के आइडिया','Daily Ideas'))}
         ${navItem('report','fa-chart-simple',T('प्रगति','Progress'))}
         ${navItem('certificate','fa-award',T('प्रमाणपत्र','Certificate'))}
       </nav>
@@ -167,7 +168,7 @@ function toggleSidebar(force) {
 function go(view) {
   S.view = view;
   document.querySelectorAll('#nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.v === view));
-  const V = { dashboard: renderDashboard, lessons: renderLessons, playground: renderPlayground, report: renderReport, certificate: renderCertificate };
+  const V = { dashboard: renderDashboard, lessons: renderLessons, playground: renderPlayground, trends: renderTrends, report: renderReport, certificate: renderCertificate };
   (V[view] || renderDashboard)();
   $('view').classList.remove('fade-in'); void $('view').offsetWidth; $('view').classList.add('fade-in');
 }

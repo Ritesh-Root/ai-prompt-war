@@ -5,6 +5,7 @@ import {
   updateModelFromEvent, llm, safeJson, guruPersona, DEFAULT_MODEL
 } from './agent'
 import { LESSONS, LEVELS, PROFESSIONS, BLOCKS } from './content'
+import { DAILY_DATE, DAILY_IDEAS } from './daily'
 import { page } from './page'
 
 const app = new Hono<{ Bindings: Env }>()
@@ -254,6 +255,25 @@ Answer their question, connect it to what they're learning, keep under 90 words.
   } catch (e: any) {
     return c.json({ error: 'ai_unavailable' }, 502)
   }
+})
+
+// ── DAILY IDEAS & TRENDS ──────────────────────────────────────
+// Curated daily: real-world trends → small business ideas → ready prompts.
+// Static seed (no AI key needed); the Guru can expand it per learner.
+app.get('/api/daily', (c) => c.json({ date: DAILY_DATE, ideas: DAILY_IDEAS }))
+
+app.post('/api/daily/copy-prompt', async (c) => {
+  const { learnerId, ideaId } = await c.req.json()
+  const idea = DAILY_IDEAS.find((d) => d.id === ideaId)
+  if (!idea) return c.json({ error: 'not_found' }, 404)
+  if (learnerId) {
+    const learner = await getLearner(c.env, learnerId)
+    if (learner) {
+      await logEvent(c.env, learnerId, 'daily_prompt_use', { ideaId })
+      await saveLearnerState(c.env, learnerId, updateModelFromEvent(learner.state, 'prompt_run', {}))
+    }
+  }
+  return c.json({ ok: true, prompt: idea.prompt })
 })
 
 // ── Frontend ──────────────────────────────────────────────────

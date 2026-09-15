@@ -162,3 +162,80 @@ function drawGuru() {
   $('guru-input').onkeydown = (e) => { if (e.key === 'Enter') send(); };
   $('guru-input').focus();
 }
+
+/* ── Daily Ideas & Trends (auto-uploaded each day) ────────── */
+async function renderDaily() {
+  const L = S.learner;
+  $('view').innerHTML = `
+  <h1 class="font-display text-2xl md:text-3xl font-extrabold mb-1">${T('रोज़ के आइडिया और ट्रेंड','Daily Ideas & Trends')}</h1>
+  <p class="text-inksoft font-bold text-sm mb-6">${T('दुनिया में क्या हो रहा है — और उसे अपने काम में कैसे इस्तेमाल करें','What is happening in the world — and how to use it in your work')}</p>
+  <div id="daily-list" class="space-y-4 max-w-3xl">
+    <div class="card p-6 text-center"><div class="typing"><span></span><span></span><span></span></div>
+    <p class="text-xs font-bold text-inksoft mt-2">${T('आज के आइडिया लोड हो रहे हैं...','Loading today\u2019s ideas...')}</p></div>
+  </div>`;
+  try {
+    if (!S.daily) S.daily = await api('get', '/api/daily');
+    const ideas = (S.daily && S.daily.ideas) || [];
+    const prof = L ? L.profession : 'all';
+    const mine = ideas.filter(d => (d.forProfessions || []).includes(prof) || (d.forProfessions || []).includes('all'));
+    const rest = ideas.filter(d => mine.indexOf(d) === -1);
+    const ordered = [...mine, ...rest];
+    const dateStr = S.daily.date ? new Date(S.daily.date + 'T00:00:00').toLocaleDateString(S.lang === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    $('daily-list').innerHTML = `
+      <p class="text-xs font-extrabold uppercase tracking-wider text-inksoft"><i class="fas fa-calendar-day mr-1"></i>${esc(dateStr)} · ${ordered.length} ${T('आइडिया','ideas')}</p>
+      ${ordered.map((d, i) => `
+      <article class="card p-5 md:p-6 fade-in">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="chip sel pointer-events-none text-xs"><i class="fas fa-bolt mr-1"></i>${esc(d.tag[S.lang] || d.tag.en)}</span>
+          ${mine.includes(d) ? `<span class="chip pointer-events-none text-xs"><i class="fas fa-user-check mr-1"></i>${T('आपके काम का','For your work')}</span>` : ''}
+          <span class="ml-auto text-[11px] font-bold text-inksoft">#${i + 1}</span>
+        </div>
+        <h2 class="font-display text-lg font-extrabold leading-snug mb-1">${esc(d.trend[S.lang] || d.trend.en)}</h2>
+        <p class="text-sm font-bold text-inksoft mb-3">${esc(d.why[S.lang] || d.why.en)}</p>
+        <div class="bg-paper border border-line rounded-xl p-4 mb-3">
+          <p class="text-[11px] font-extrabold uppercase tracking-wider text-inksoft mb-1"><i class="fas fa-lightbulb mr-1 text-saffron"></i>${T('आज का आइडिया','Today\u2019s idea')}</p>
+          <p class="text-sm font-bold">${esc(d.idea[S.lang] || d.idea.en)}</p>
+        </div>
+        <details class="bg-paper border border-line rounded-xl px-4 py-3 mb-3">
+          <summary class="text-sm font-extrabold cursor-pointer"><i class="fas fa-terminal mr-1"></i>${T('तैयार प्रॉम्प्ट देखें','See ready prompt')}</summary>
+          <p class="text-sm font-semibold mt-2 whitespace-pre-wrap" id="dp-${d.id}">${esc(d.prompt[S.lang] || d.prompt.en)}</p>
+        </details>
+        <div class="flex flex-wrap gap-2">
+          <button class="btn-ink px-4 py-2 text-sm" data-copy="${d.id}"><i class="fas fa-copy mr-1"></i>${T('प्रॉम्प्ट कॉपी करें','Copy prompt')}</button>
+          <button class="btn-ghost px-4 py-2 text-sm" data-try="${d.id}"><i class="fas fa-flask mr-1"></i>${T('प्लेग्राउंड में आज़माएँ','Try in Playground')}</button>
+        </div>
+        <p class="text-[11px] font-bold text-inksoft/70 mt-3"><i class="fas fa-link mr-1"></i>${T('स्रोत','Source')}: ${esc(d.source)}</p>
+      </article>`).join('')}`;
+    $('daily-list').onclick = async (e) => {
+      const cp = e.target.closest('[data-copy]');
+      const tr = e.target.closest('[data-try]');
+      if (cp) {
+        const id = cp.dataset.copy;
+        const idea = ordered.find(x => x.id === id);
+        const txt = idea ? (idea.prompt[S.lang] || idea.prompt.en) : '';
+        try { await navigator.clipboard.writeText(txt); } catch { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+        try { await api('post', '/api/daily/copy-prompt', { learnerId: S.learnerId, ideaId: id }); } catch {}
+        cp.innerHTML = '<i class="fas fa-check mr-1"></i>' + T('कॉपी हो गया','Copied');
+        setTimeout(() => { cp.innerHTML = '<i class="fas fa-copy mr-1"></i>' + T('प्रॉम्प्ट कॉपी करें','Copy prompt'); }, 1500);
+      }
+      if (tr) {
+        const id = tr.dataset.try;
+        const idea = ordered.find(x => x.id === id);
+        const txt = idea ? (idea.prompt[S.lang] || idea.prompt.en) : '';
+        try { await api('post', '/api/daily/copy-prompt', { learnerId: S.learnerId, ideaId: id }); } catch {}
+        S.playHistory.push({ role: 'user', content: txt });
+        go('playground');
+        try {
+          const chat = $('play-chat');
+          chat.insertAdjacentHTML('beforeend', '<div class="bubble-user p-3 ml-8 text-sm font-bold">' + esc(txt) + '</div><div class="bubble-ai p-4 mr-4" id="pending"><div class="typing"><span></span><span></span><span></span></div></div>');
+          const { reply } = await api('post', '/api/playground/run', { learnerId: S.learnerId, prompt: txt, history: S.playHistory.slice(0, -1) });
+          S.playHistory.push({ role: 'assistant', content: reply });
+          const p = $('pending'); if (p) p.outerHTML = '<div class="bubble-ai p-4 mr-4 text-sm font-semibold whitespace-pre-wrap">' + esc(reply) + '</div>';
+          chat.scrollTop = chat.scrollHeight;
+        } catch { const p = $('pending'); if (p) p.outerHTML = aiError(); }
+      }
+    };
+  } catch {
+    $('daily-list').innerHTML = '<div class="card p-6 text-sm font-bold text-red-500">' + T('आज के आइडिया लोड नहीं हुए — बाद में फिर कोशिश करें','Could not load today\u2019s ideas — please try later') + '</div>';
+  }
+}

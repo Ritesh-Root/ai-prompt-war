@@ -34,6 +34,15 @@ function renderDashboard() {
     ${statCard('fa-gauge-high', T('प्रॉम्प्ट स्किल','Prompt skill'), (st.promptSkill || 0) + '/100', 'text-ink')}
   </div>
 
+  <section class="card p-5 md:p-6 mb-6 flex flex-col md:flex-row md:items-center gap-4" id="daily-teaser" style="border-left:4px solid #FF8A3D">
+    <div class="w-11 h-11 rounded-xl bg-saffron/10 text-saffron flex items-center justify-center shrink-0"><i class="fas fa-newspaper"></i></div>
+    <div class="flex-1 min-w-0">
+      <p class="font-display font-extrabold">${T('आज के आइडिया और ट्रेंड','Today\u2019s ideas & trends')}</p>
+      <p class="text-sm font-bold text-inksoft" id="daily-teaser-text">${T('दुनिया में क्या हो रहा है — 5 नए आइडिया तैयार हैं','See what is happening in the world — 5 fresh ideas ready')}</p>
+    </div>
+    <button class="btn-ink px-5 py-2.5 text-sm shrink-0" onclick="go('daily')">${T('आज के आइडिया देखें','See today\u2019s ideas')} <i class="fas fa-arrow-right ml-1"></i></button>
+  </section>
+
   <div class="grid md:grid-cols-2 gap-4">
     <section class="card p-6">
       <h2 class="font-extrabold mb-4"><i class="fas fa-map mr-2"></i>${T('आपकी सीखने की यात्रा','Your learning path')}</h2>
@@ -76,6 +85,18 @@ function renderDashboard() {
     else if (adv && adv.lessonId) openLesson(adv.lessonId);
     else go('lessons');
   };
+  // Keep the daily teaser fresh without an extra fetch on every dashboard visit
+  try {
+    if (!S.daily) api('get', '/api/daily').then(d => {
+      S.daily = d;
+      const el = $('daily-teaser-text');
+      if (el && d && d.ideas && d.ideas[0]) el.textContent = (d.ideas[0].trend[S.lang] || d.ideas[0].trend.en).slice(0, 110) + '…';
+    }).catch(() => {});
+    else {
+      const el = $('daily-teaser-text');
+      if (el && S.daily.ideas && S.daily.ideas[0]) el.textContent = (S.daily.ideas[0].trend[S.lang] || S.daily.ideas[0].trend.en).slice(0, 110) + '…';
+    }
+  } catch {}
 }
 
 function statCard(icon, label, val, color) {

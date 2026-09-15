@@ -14,6 +14,7 @@ const S = {
   guruOpen: false,
   guruHistory: [],
   playHistory: [],
+  daily: null,
   sidebarOpen: false
 };
 
@@ -119,6 +120,7 @@ function renderShell() {
       <nav class="flex-1 px-3 py-4 space-y-1" id="nav" aria-label="Main">
         <p class="text-[11px] uppercase tracking-wider text-inksoft/70 font-extrabold px-3 mb-2">${T('मुख्य मेनू','Main Menu')}</p>
         ${navItem('dashboard','fa-table-columns',T('डैशबोर्ड','Dashboard'))}
+        ${navItem('daily','fa-newspaper',T('रोज़ के आइडिया','Daily Ideas'))}
         ${navItem('lessons','fa-book-open',T('पाठ','Lessons'))}
         ${navItem('playground','fa-flask',T('प्लेग्राउंड','Playground'))}
         ${navItem('report','fa-chart-simple',T('प्रगति','Progress'))}
@@ -167,7 +169,7 @@ function toggleSidebar(force) {
 function go(view) {
   S.view = view;
   document.querySelectorAll('#nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.v === view));
-  const V = { dashboard: renderDashboard, lessons: renderLessons, playground: renderPlayground, report: renderReport, certificate: renderCertificate };
+  const V = { dashboard: renderDashboard, daily: renderDaily, lessons: renderLessons, playground: renderPlayground, report: renderReport, certificate: renderCertificate };
   (V[view] || renderDashboard)();
   $('view').classList.remove('fade-in'); void $('view').offsetWidth; $('view').classList.add('fade-in');
 }
